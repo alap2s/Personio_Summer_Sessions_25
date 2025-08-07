@@ -2,35 +2,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const stringContainer = document.getElementById('string-container');
     const strings = Array.from(document.querySelectorAll('.string'));
     const cursor = document.querySelector('.cursor');
-    const audioFiles = [
-        'sounds/note1.wav', 'sounds/note2.wav', 'sounds/note3.wav', 'sounds/note4.wav',
-        'sounds/note5.wav', 'sounds/note6.wav', 'sounds/note1.wav', 'sounds/note2.wav'
-    ];
 
     let audioContext;
-    let audioBuffers = [];
+    const noteFrequencies = [
+        261.63, // C4
+        329.63, // E4
+        392.00, // G4
+        493.88, // B4
+        587.33, // D5
+        329.63, // E4
+        392.00, // G4
+        261.63  // C4
+    ];
 
-    async function setupAudio() {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const promises = audioFiles.map(async (file) => {
-            const response = await fetch(file);
-            const arrayBuffer = await response.arrayBuffer();
-            return await audioContext.decodeAudioData(arrayBuffer);
-        });
-        audioBuffers = await Promise.all(promises);
-    }
+    function playNote(index) {
+        if (!audioContext) return;
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
 
-    function playSound(index) {
-        if (!audioContext || !audioBuffers[index]) return;
-        const source = audioContext.createBufferSource();
-        source.buffer = audioBuffers[index];
-        source.connect(audioContext.destination);
-        source.start(0);
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.type = 'sine';
+        oscillator.frequency.value = noteFrequencies[index];
+
+        const now = audioContext.currentTime;
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.5, now + 0.05);
+        gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
+
+        oscillator.start(now);
+        oscillator.stop(now + 0.5);
     }
 
     const initAudio = () => {
         if (!audioContext) {
-            setupAudio();
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
         }
         document.removeEventListener('mousedown', initAudio);
         document.removeEventListener('touchstart', initAudio);
@@ -117,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isDragging = false;
         if(currentlyBentString) {
             currentlyBentString.isBeingDragged = false;
-            playSound(strings.indexOf(currentlyBentString));
+            playNote(strings.indexOf(currentlyBentString));
             currentlyBentString = null;
         }
     });
@@ -136,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetString && targetString !== currentlyBentString) {
                 if (currentlyBentString) {
                     currentlyBentString.isBeingDragged = false;
-                    playSound(strings.indexOf(currentlyBentString));
+                    playNote(strings.indexOf(currentlyBentString));
                 }
                 currentlyBentString = targetString;
                 currentlyBentString.isBeingDragged = true;
