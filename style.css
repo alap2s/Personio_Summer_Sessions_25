@@ -96,6 +96,7 @@ main {
     animation: sunPulsate 5s infinite alternate ease-in-out;
     mix-blend-mode: multiply;
     pointer-events: none;
+    filter: url(#liquid-sun);
 }
 
 @keyframes sunPulsate {
