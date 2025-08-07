@@ -8,6 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Cooper+Hewitt:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <svg style="position:absolute; width:0; height:0; overflow:hidden;">
+      <defs>
+        <filter id="liquid-sun">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01" numOctaves="1" result="turbulence" seed="10">
+            <animate attributeName="baseFrequency" dur="10s" keyTimes="0;0.5;1" values="0.01 0.02;0.02 0.03;0.01 0.02" repeatCount="indefinite" />
+          </feTurbulence>
+          <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="50" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+      </defs>
+    </svg>
     <canvas id="particle-canvas"></canvas>
     <div class="cursor"></div>
     <div class="container">
