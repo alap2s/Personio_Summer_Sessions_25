@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap');
+
+:root {
+    --bg-color: #F0EFE0;
+    --text-color: #FF462A;
+    --yellow: #DDCF0B;
+    --blue: #4895C7;
+    --red: #FF462A;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Cooper Hewitt', sans-serif;
+    margin: 0;
+    overflow: hidden;
+    cursor: none;
+}
+
+.cursor {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--text-color);
+    position: fixed;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 10000;
+    mix-blend-mode: difference;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header, footer {
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+h1 {
+    font-family: 'Racing Sans One', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    margin: 0;
+    text-transform: lowercase;
+}
+
+h2 {
+    font-size: clamp(1rem, 2.5vw, 2rem);
+    margin: 0;
+}
+
+p {
+    font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.sun {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vw;
+    height: 40vw;
+    max-width: 400px;
+    max-height: 400px;
+    background-color: var(--yellow);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.string {
+    flex-grow: 1;
+    position: relative;
+    will-change: transform;
+}
+
+.yellow-string { background-color: var(--yellow); z-index: 2; }
+.blue-string { background-color: var(--blue); z-index: 0; }
+.red-string { background-color: var(--red); z-index: 2; }
